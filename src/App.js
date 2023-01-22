@@ -6,9 +6,10 @@ import "./style.scss"
 function App() {
   return (
 //  <Register />
-<Login />
+// {/* <Login /> */}
 <Home />
-    );
+
+);
 }
 
 export default App;

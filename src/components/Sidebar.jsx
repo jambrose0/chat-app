@@ -1,5 +1,5 @@
 import React from 'react'
-import ChatIcons from './ChatIcons'
+import Chats from './Chats'
 import Navbar from './Navbar'
 import Search from './Search'
 const Sidebar = () => {
@@ -7,7 +7,7 @@ const Sidebar = () => {
     <div className='sidebar'>
         <Navbar />
         <Search />
-        <ChatIcons />
+        <Chats />
     </div>
   )
 }

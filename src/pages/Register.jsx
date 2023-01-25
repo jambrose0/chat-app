@@ -35,6 +35,7 @@ uploadTask.on('state_changed',
   }, 
   () => {
    
+    //UPLOADING IMAGES FOR OTHER USERS TO SEE IS AT 1 HOUR MARK
     getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
       await updateProfile(res.user, {
         displayName,

@@ -1,11 +1,15 @@
 import React from 'react'
+import { useState} from 'react'
 import add from '../img/add.png'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../firebase'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { auth,storage, db } from '../firebase'
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore"; 
 
 
 export const Register = () => {
 
+  //useState is at approx 50:00
 const [err, setErr] = useState(false);
 const handleSubmit = async (e) => {
   e.preventDefault()
@@ -15,11 +19,38 @@ const handleSubmit = async (e) => {
   const file = e.target[3].files[0];
   
   try{
- 
     //authenticates users via email and password
 const res = await createUserWithEmailAndPassword(auth, email, password);
-//allows for upload of files
-const storage = getStorage();
+// following codeblock allows upload of files
+
+const storageRef = ref(storage, displayName);
+
+const uploadTask = uploadBytesResumable(storageRef, file);
+
+uploadTask.on('state_changed', 
+ 
+  (error) => {
+    // Handle unsuccessful uploads
+    setErr(true)
+  }, 
+  () => {
+   
+    getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
+      await updateProfile(res.user, {
+        displayName,
+        photoURL: downloadURL, 
+      })
+      await setDoc(doc(db, "users", res.user.uid), {
+       displayName,
+       email,
+       photoURL: downloadURL
+      })
+      
+      
+    });
+  }
+);
+
 
 
 

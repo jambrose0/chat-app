@@ -9,7 +9,6 @@ import { doc, setDoc } from "firebase/firestore";
 
 export const Register = () => {
 
-  //useState is at approx 50:00
 const [err, setErr] = useState(false);
 const handleSubmit = async (e) => {
   e.preventDefault()
@@ -35,13 +34,15 @@ uploadTask.on('state_changed',
   }, 
   () => {
    
-    //UPLOADING IMAGES FOR OTHER USERS TO SEE IS AT 1 HOUR MARK
+    
     getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
       await updateProfile(res.user, {
         displayName,
         photoURL: downloadURL, 
       })
       await setDoc(doc(db, "users", res.user.uid), {
+
+       uid: res.user.uid,
        displayName,
        email,
        photoURL: downloadURL
